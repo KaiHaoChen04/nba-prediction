@@ -44,6 +44,7 @@ def shift_col(team, col_name):
 def add_col(dataframe, col):
     return dataframe.groupby('team', group_keys = False).apply(lambda x: shift_col(x, col))
 
+
 stats = pd.read_csv("nba_games.csv", index_col = 0).sort_values('date').reset_index(drop=True)
 stats = stats.groupby('team', group_keys=False).apply(add_target)
 stats['target'][pd.isnull(stats['target'])] = 2
@@ -85,5 +86,4 @@ removed_columns = list(full.columns[full.dtypes=='object']) + removed_columns
 selected_columns = full.columns[~full.columns.isin(removed_columns)]
 sfs.fit(full[selected_columns], full['target'])
 predictor = list(selected_columns[sfs.get_support()])
-ML_Prediction = backtest(full, rr, predictor)
-print(accuracy_score(ML_Prediction['Result'], ML_Prediction['Prediction']))
+ML_Prediction = backtest(full, rr, predictor)  
